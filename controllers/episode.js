@@ -108,7 +108,7 @@ module.exports = {
     let endDateIso = endDate.toISOString();
 
     let queryString =
-      "SELECT idrugradioepisode, idhost, idshow, rugradioepisode.description, rugradioepisode.name, start, end, rugradiohost.idrugradiohost, rugradiohost.handle, rugradiohost.image, rugradioshow.idrugradioshow, rugradioshow.name as showname, rugradioshow.description as showdescription  FROM rugradioepisode LEFT join rugradiohost ON idhost = idrugradiohost LEFT join rugradioshow ON idshow = idrugradioshow WHERE start >= ? AND start < ?";
+      "SELECT idrugradioepisode, idhost, idshow, rugradioepisode.description, rugradioepisode.name, start, end, rugradiohost.idrugradiohost, rugradiohost.handle, rugradiohost.image, rugradioshow.idrugradioshow, rugradioshow.name as showname, rugradioshow.description as showdescription  FROM rugradioepisode LEFT join rugradiohost ON idhost = idrugradiohost LEFT join rugradioshow ON idshow = idrugradioshow WHERE start >= ? AND start < ? ORDER BY start ASC";
 
     pool.query(queryString, [startDateIso, endDateIso], (err, rows, fields) => {
       if (err) {
