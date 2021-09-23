@@ -21,6 +21,34 @@ module.exports = {
     }
   },
 
+  updateDegen: (req, res, next) => {
+    const password = req.body.password;
+    const iddegen = req.body.iddegen;
+    let handle = req.body.handle;
+    let image = req.body.image;
+
+    if (handle == "") {
+      handle = null;
+    }
+    if (image == "") {
+      image = null;
+    }
+
+    if (password == process.env.SECURE_PASSWORD) {
+      queryString =
+        "UPDATE degen SET handle = COALESCE(?, handle), image = COALESCE(?, image)  WHERE iddegen = ?;";
+      pool.query(queryString, [handle, image, iddegen], (err, rows, fields) => {
+        if (err) {
+          return next(err);
+        } else {
+          return res.json(rows);
+        }
+      });
+    } else {
+      next();
+    }
+  },
+
   removeDegen: (req, res, next) => {
     const password = req.body.password;
     const iddegen = req.body.iddegen;

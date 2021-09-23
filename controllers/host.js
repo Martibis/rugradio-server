@@ -42,12 +42,19 @@ module.exports = {
   updateHost: (req, res, next) => {
     const password = req.body.password;
     const idhost = req.body.idhost;
-    const handle = req.body.handle;
-    const image = req.body.image;
+    let handle = req.body.handle;
+    let image = req.body.image;
+
+    if (handle == "") {
+      handle = null;
+    }
+    if (image == "") {
+      image = null;
+    }
 
     if (password == process.env.SECURE_PASSWORD) {
       queryString =
-        "UPDATE rugradiohost SET handle = ?, image = ?  WHERE idrugradiohost = ?;";
+        "UPDATE rugradiohost SET handle = COALESCE(?, handle), image = COALESCE(?, image)  WHERE idrugradiohost = ?;";
       pool.query(queryString, [handle, image, idhost], (err, rows, fields) => {
         if (err) {
           return next(err);

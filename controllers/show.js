@@ -43,12 +43,19 @@ module.exports = {
   updateShow: (req, res, next) => {
     const password = req.body.password;
     const idshow = req.body.idshow;
-    const name = req.body.name;
-    const description = req.body.description;
+    let name = req.body.name;
+    let description = req.body.description;
+
+    if (name == "") {
+      name = null;
+    }
+    if (description == "") {
+      description = null;
+    }
 
     if (password == process.env.SECURE_PASSWORD) {
       queryString =
-        "UPDATE rugradioshow SET name = ?, description = ?  WHERE idrugradioshow = ?;";
+        "UPDATE rugradioshow SET name = COALESCE(?, name), description = COALESCE(?, description)  WHERE idrugradioshow = ?;";
       pool.query(
         queryString,
         [name, description, idshow],

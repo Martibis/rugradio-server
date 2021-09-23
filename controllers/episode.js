@@ -51,16 +51,35 @@ module.exports = {
   updateEpisode: (req, res, next) => {
     const password = req.body.password;
     const idepisode = req.body.idepisode;
-    const idhost = req.body.idhost;
-    const idshow = req.body.idshow;
-    const description = req.body.description;
-    const name = req.body.name;
-    const start = req.body.start;
-    const end = req.body.end;
+    let idhost = req.body.idhost;
+    let idshow = req.body.idshow;
+    let description = req.body.description;
+    let name = req.body.name;
+    let start = req.body.start;
+    let end = req.body.end;
+
+    if (idhost == "") {
+      idhost = null;
+    }
+    if (idshow == "") {
+      idshow = null;
+    }
+    if (description == "") {
+      description = null;
+    }
+    if (name == "") {
+      name = null;
+    }
+    if (start == "") {
+      start = null;
+    }
+    if (end == "") {
+      end = null;
+    }
 
     if (password == process.env.SECURE_PASSWORD) {
       queryString =
-        "UPDATE rugradioepisode SET idhost = ?, idshow = ?, name = ?, description = ?, start = ?, end = ?  WHERE idrugradioepisode = ?;";
+        "UPDATE rugradioepisode SET idhost = COALESCE(?, idhost), idshow = COALESCE(?, idshow), name = COALESCE(?, name), description = COALESCE(?, description), start = COALESCE(?, start), end = COALESCE(?, end)  WHERE idrugradioepisode = ?;";
       pool.query(
         queryString,
         [idhost, idshow, name, description, start, end, idepisode],
